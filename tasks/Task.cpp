@@ -136,6 +136,7 @@ bool Task::startHook()
 
 void Task::processImage() {
     Frame *frame_ptr = output_frame.write_access();
+    bool err = false;
     try 
     {
         frame_helper.convert(*camera_frame,*frame_ptr,_offset_x.value(),
@@ -144,10 +145,13 @@ void Task::processImage() {
     catch(std::runtime_error e)
     {
         RTT::log(RTT::Error) << "processing error: " << e.what() << RTT::endlog();
-        RTT::log(RTT::Error) << "Have you specified camera_format and output_format right?" << RTT::endlog();
         report(PROCESSING_ERROR);
+        err = true;
     }
     output_frame.reset(frame_ptr);
+    if(err) {
+        throw std::runtime_error("Conversion is not available, try another camera_format and output_format");
+    }
 }
 
 bool Task::getFrame() {
