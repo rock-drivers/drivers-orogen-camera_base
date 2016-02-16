@@ -173,6 +173,14 @@ task_context "Task" do
       argument('type', '/camera/double_attrib/CamAttrib', 'type')
 end
 
+# Task using OpenCV video caputre
+task_context "VideoCapture" do
+    subclasses "camera_base::Task"
+    needs_configuration
+
+    periodic 0.02
+end
+
 # Task to pre-process images before used by other components
 task_context "Preprocess" do
     reports :PROCESSING_ERROR
@@ -208,3 +216,5 @@ task_context "Preprocess" do
 
     port_driven
 end
+
+
